@@ -27,7 +27,7 @@ struct FBullCowCount {
 enum class EGuessStatus {
     Invalid_Status,
     OK,
-    Not_Isogramm,
+    Not_Isogram,
     Wrong_Length,
     Not_Lowercase
 };
@@ -51,8 +51,8 @@ public:
 private:
     // see constructor for initialization
     int32 MyCurrentTry;
-    int32 MyMaxTries;
     FString MyHiddenWord;
     bool bGameIsWon;
-    bool bIsIsogram(FString) const;
+    bool IsIsogram(FString) const;
+    bool IsLowercase(FString) const;
 };

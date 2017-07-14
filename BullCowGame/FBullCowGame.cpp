@@ -8,13 +8,16 @@
 
 #include "FBullCowGame.hpp"
 #include <map>
-#define TMap std::map;
+#define TMap std::map
 
-FBullCowGame::FBullCowGame() {
+FBullCowGame::FBullCowGame() { // default constructor
     Reset();
 }
 
-int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
+int32 FBullCowGame::GetMaxTries() const {
+    TMap<int32, int32> WordLengthToMaxTries { {3,4}, {4,7}, {5,10}, {6,16}, {7,20} };
+    return WordLengthToMaxTries[MyHiddenWord.length()];
+}
 
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 
@@ -23,10 +26,8 @@ int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); 
 bool FBullCowGame::IsGameWon() const { return bGameIsWon; }
 
 void FBullCowGame::Reset() {
-    constexpr int32 MAX_TRIES = 8;
-    MyMaxTries = MAX_TRIES;
     
-    const FString HIDDEN_WORD = "planet";
+    const FString HIDDEN_WORD = "pla";
     MyHiddenWord = HIDDEN_WORD;
     
     MyCurrentTry = 1;
@@ -38,9 +39,9 @@ void FBullCowGame::Reset() {
 
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const {
     // if the guess isn't an isogram
-    if(!bIsIsogram(Guess)) {
-        return EGuessStatus::Not_Isogramm;
-    } else if (false) { // if the guess isn't all lower case
+    if(!IsIsogram(Guess)) {
+        return EGuessStatus::Not_Isogram;
+    } else if (!IsLowercase(Guess)) { // if the guess isn't all lower case
         return EGuessStatus::Not_Lowercase;
     } else if (Guess.length() != GetHiddenWordLength()) { // if the guess length is wrong
         return EGuessStatus::Wrong_Length;
@@ -86,15 +87,35 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess) {
     return BullCowCount;
 }
 
-bool FBullCowGame::bIsIsogram(FString Word) const {
+bool FBullCowGame::IsIsogram(FString Word) const {
     // treat 0 and 1 letter words as isograms
-    
+    if (Word.length() <= 1) { return true; }
+    // set up our map
+    TMap <char, bool> LetterSeen;
     // loop through all the letters of the word
+    for (auto Letter : Word) { // auto means we don't care about the type of Letter
+        Letter = tolower(Letter);
         // if the letter is in the map
+        if (LetterSeen[Letter] == true) {
             // we do not have an isogram
-    
-        // otherwise
+            return false;
+        } else {
             // add the letter to the map
+            LetterSeen[Letter] = true;
+        }
+    }
+    return true;
+}
+
+bool FBullCowGame::IsLowercase(FString Word) const {
+    // treat 0 and 1 letter words as passing so we could catch them in another method
+    if (Word.length() <= 1) {return true; }
+    // loop over every letter in the word
+    for (auto Letter : Word) {
+        // if letter is not lowercase, return early (false)
+        if (!islower(Letter)) { return false; }
+    }
+    // if we did not have an early return, than all letters must be lower case
     return true;
 }
 
