@@ -5,7 +5,7 @@
 //  Created by Volodymyr Lipunov on 7/11/17.
 //  Copyright © 2017 Volodymyr Lipunov. All rights reserved.
 //
-
+#pragma once
 #ifndef FBullCowGame_hpp
 #define FBullCowGame_hpp
 
@@ -43,15 +43,19 @@ public:
     int32 GetMaxTries() const;
     int32 GetCurrentTry() const;
     int32 GetHiddenWordLength() const;
+    bool IsHiddenWordSelected() const;
+    bool CheckLengthValidity(FString) const;
     bool IsGameWon() const;
     EGuessStatus CheckGuessValidity(FString) const;
-    void Reset(); // TODO make a richer return value
+    void Reset();
+    void SetHiddenWord(int32);
     FBullCowCount SubmitValidGuess(FString); // counts bulls and cows and increases try # assuming valid guess input
     
 private:
     // see constructor for initialization
     int32 MyCurrentTry;
     FString MyHiddenWord;
+    bool HiddenWordSelected;
     bool bGameIsWon;
     bool IsIsogram(FString) const;
     bool IsLowercase(FString) const;

@@ -23,17 +23,54 @@ int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 
 int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
 
+bool FBullCowGame::IsHiddenWordSelected() const { return HiddenWordSelected; }
+
 bool FBullCowGame::IsGameWon() const { return bGameIsWon; }
+
+bool FBullCowGame::CheckLengthValidity(FString Length) const {
+    // return false if provided string is longer than 1 char since the valid input is between 3 and 7
+    if  (Length.length() != 1) { return false; }
+    // convert string to integer
+    int32 LengthInt = std::stoi(Length);
+    // early return true if integer is between 3 and 7 since that is the needed word length
+    if (LengthInt >= 3 && LengthInt <= 7) {
+        return true;
+    }
+    // return false if integer is not between 3 and 7
+    return false;
+}
 
 void FBullCowGame::Reset() {
     
-    const FString HIDDEN_WORD = "pla";
-    MyHiddenWord = HIDDEN_WORD;
+    HiddenWordSelected = false;
     
     MyCurrentTry = 1;
     
     bGameIsWon = false;
     
+    return;
+}
+
+void FBullCowGame::SetHiddenWord(int32 Length) {
+    switch (Length) {
+        case 3:
+            MyHiddenWord = "ant";
+            break;
+        case 4:
+            MyHiddenWord = "club";
+            break;
+        case 5:
+            MyHiddenWord = "track";
+            break;
+        case 6:
+            MyHiddenWord = "planet";
+            break;
+        case 7:
+            MyHiddenWord = "flyback";
+            break;
+        default:
+            break;
+    }
     return;
 }
 
